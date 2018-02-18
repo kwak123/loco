@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { tryLogOut } from '../actions/login';
+import { tryLogOut } from '../actions/user';
 
 import NavBar from '../components/navbar/NavBar.jsx';
 

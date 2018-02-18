@@ -1,10 +1,10 @@
-import loggedIn from './login';
+import user from './user';
 import fetching from './fetching';
 import api from './api';
 import { combineReducers } from 'redux';
 
 export default combineReducers({
-  loggedIn,
+  user,
   fetching,
   api
 });

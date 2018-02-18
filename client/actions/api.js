@@ -29,23 +29,23 @@ export const GET_STOPS_FAIL = 'GET_STOPS_FAIL';
 
 const getRoutesStart = () => ({ type: GET_ROUTES_START });
 const getRoutesSuccess = (routes) => ({ type: GET_ROUTES_SUCCESS, routes });
-const getRoutesFail = () => ({ type: GET_ROUTES_FAIL });
+const getRoutesFail = (error) => ({ type: GET_ROUTES_FAIL, error });
 
 const getServiceStart = () => ({ type: GET_SERVICE_START });
 const getServiceSuccess = (service) => ({ type: GET_SERVICE_SUCCESS, service });
-const getServiceFail = () => ({ type: GET_SERVICE_FAIL });
+const getServiceFail = (error) => ({ type: GET_SERVICE_FAIL, error });
 
 const organizeRoutesStart = () => ({ type: ORGANIZE_ROUTES_START });
 const organizeRoutesSuccess = (organized) => ({ type: ORGANIZE_ROUTES_SUCCESS, organized });
-const organizeRoutesFail = () => ({ type: ORGANIZE_ROUTES_FAIL });
+const organizeRoutesFail = (error) => ({ type: ORGANIZE_ROUTES_FAIL, error });
 
 const getRoutesAndServiceStart = () => ({ type: GET_ROUTES_AND_SERVICE_START });
 const getRoutesAndServiceSuccess = () => ({ type: GET_ROUTES_AND_SERVICE_SUCCESS });
-const getRoutesAndServiceFail = () => ({ type: GET_ROUTES_AND_SERVICE_FAIL });
+const getRoutesAndServiceFail = (error) => ({ type: GET_ROUTES_AND_SERVICE_FAIL, error });
 
 const getStopsStart = () => ({ type: GET_STOPS_START });
 const getStopsSuccess = (stops) => ({ type: GET_STOPS_SUCCESS, stops });
-const getStopsFail = () => ({ type: GET_STOPS_FAIL });
+const getStopsFail = (error) => ({ type: GET_STOPS_FAIL, error });
 
 /**
  * Fetch all available routes from API
@@ -56,7 +56,7 @@ export const getRoutes = () => (dispatch) => {
   .then(({ data }) => dispatch(getRoutesSuccess(data)))
   .catch((error) => {
     // console.log('failed to get routes', error);
-    dispatch(getRoutesFail());
+    dispatch(getRoutesFail(error.message));
   });
 };
 
@@ -69,7 +69,7 @@ export const getService = () => (dispatch) => {
   // The nature of MTA service data means the actual interesting data is locked behind lines
   .then(({ data }) => dispatch(getServiceSuccess(data.lines)))
   .catch((error) => {
-    dispatch(getServiceFail());
+    dispatch(getServiceFail(error.message));
   });
 };
 
@@ -86,7 +86,7 @@ export const organizeRoutes = () => (dispatch, getState) => {
     let organized = util.routeOrganizer(service, routes);
     return dispatch(organizeRoutesSuccess(organized));
   } catch (exception) {
-    dispatch(organizeRoutesFail());
+    dispatch(organizeRoutesFail('Failed to organize routes'));
   }
 };
 
@@ -102,7 +102,7 @@ export const getRoutesAndService = () => (dispatch, getState) => {
   .catch((error) => {
     // The last possible failing point here is here.
     // Not sure how this would get reached, but just in case
-    dispatch(getRoutesAndServiceFail());
+    dispatch(getRoutesAndServiceFail(error.message));
   });
 };
 
@@ -122,6 +122,6 @@ export const getStops = (routeId) => (dispatch, getState) => {
   })
   .then(({ data }) => dispatch(getStopsSuccess(data)))
   .catch((error) => {
-    dispatch(getStopsFail());
+    dispatch(getStopsFail(error.message));
   });
 };

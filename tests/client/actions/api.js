@@ -15,18 +15,11 @@ import * as util from '../../../client/lib/util';
 
 // Nature of MTA data means the actually used data is in the lines property
 const mockService = mockServiceObj.lines;
-const initialState = {
-  routes: [],
-  service: [],
-  organized: [],
-  selectedStop: '',
-  selectedRoute: ''
-};
 
 describe('api actions', () => {
   let store;
   beforeEach(() => {
-    store = mockStore({ routes: [], service: [], organized: {} });
+    store = mockStore({ routes: [], service: [], organized: {}, stops: [], error: '' });
     moxios.install()
   });
   afterEach(() => moxios.uninstall());
@@ -46,12 +39,12 @@ describe('api actions', () => {
       });
     });
 
-    it('should return GET_ROUTES_START then GET_ROUTES_FAIL', () => {
+    it('should return GET_ROUTES_START then GET_ROUTES_FAIL with error payload', () => {
       moxios.wait(() => moxios.requests.mostRecent().respondWith({ status: 400 }));
 
       let expectedActions = [
         { type: apiActions.GET_ROUTES_START },
-        { type: apiActions.GET_ROUTES_FAIL }
+        { type: apiActions.GET_ROUTES_FAIL, error: 'Request failed with status code 400' }
       ];
 
       return store.dispatch(apiActions.getRoutes()).then(() => {
@@ -79,7 +72,7 @@ describe('api actions', () => {
 
       let expectedActions = [
         { type: apiActions.GET_SERVICE_START },
-        { type: apiActions.GET_SERVICE_FAIL }
+        { type: apiActions.GET_SERVICE_FAIL, error: 'Request failed with status code 400' }
       ];
 
       return store.dispatch(apiActions.getService()).then(() => {
@@ -115,7 +108,7 @@ describe('api actions', () => {
       let orgStore = mockStore({ service: mockService, organized: {} }); // missing routes
       let expectedActions = [
         { type: apiActions.ORGANIZE_ROUTES_START },
-        { type: apiActions.ORGANIZE_ROUTES_FAIL }
+        { type: apiActions.ORGANIZE_ROUTES_FAIL, error: 'Failed to organize routes' }
       ];
 
       orgStore.dispatch(apiActions.organizeRoutes());
@@ -154,6 +147,19 @@ describe('api actions', () => {
       let expectedActions = [
         { type: apiActions.GET_STOPS_START },
         { type: apiActions.GET_STOPS_SUCCESS, stops: mockStops }
+      ];
+
+      return store.dispatch(apiActions.getStops('7')).then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    });
+
+    it('should dispatch GET_STOPS_START then GET_STOPS_FAIL with error payload', () => {
+      moxios.stubRequest('/api/stops?sub=mta&route_id=7', { status: 400 });
+
+      let expectedActions = [
+        { type: apiActions.GET_STOPS_START },
+        { type: apiActions.GET_STOPS_FAIL, error: 'Request failed with status code 400' }
       ];
 
       return store.dispatch(apiActions.getStops('7')).then(() => {

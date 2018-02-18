@@ -1,18 +1,19 @@
 import { connect } from 'react-redux';
-import { getRoutes } from '../actions/api';
+import { getRoutesAndService } from '../actions/api';
 
 import Routes from '../components/routes/Routes.jsx';
 
 const mapStateToProps = (state) => {
   return {
-    routes: state.api.routes
+    routes: state.api.routes,
+    organized: state.api.organized
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getRoutes() {
-      dispatch(getRoutes());
+    getRoutesAndService() {
+      dispatch(getRoutesAndService());
     }
   }
 };
