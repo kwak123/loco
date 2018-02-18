@@ -11,7 +11,10 @@ import {
   // GET_STOPS_FAIL
 } from '../actions/api';
 
-export default (state = { routes: [], service: [], organized: {} }, action) => {
+import initialState from '../store/initial-state';
+const apiState = initialState.api;
+
+export default (state = apiState, action) => {
   switch (action.type) {
     case GET_ROUTES_SUCCESS:
       // Replace the old routes, don't want to hold on to those
@@ -22,6 +25,8 @@ export default (state = { routes: [], service: [], organized: {} }, action) => {
     case ORGANIZE_ROUTES_SUCCESS:
       // Replace old organized routes, may be out of date
       return Object.assign({}, state, { organized: action.organized });
+    case GET_STOPS_SUCCESS:
+      return Object.assign({}, state, { stops: action.stops });
     default: return state;
   }
 };

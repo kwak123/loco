@@ -8,6 +8,7 @@ const mockStore = configureMockStore(middlewares);
 import * as apiActions from '../../../client/actions/api';
 import mockRoutes from '../shared/mock-routes.json';
 import mockServiceObj from '../shared/mock-service.json';
+import mockStops from '../shared/mock-stops.json';
 import organizedRoutes from '../shared/organized-routes.json';
 
 import * as util from '../../../client/lib/util';
@@ -147,5 +148,17 @@ describe('api actions', () => {
 
   describe('getStops', () => {
     
+    it('should dispatch GET_STOPS_START then GET_STOPS_SUCCESS if successful', () => {
+      moxios.stubRequest('/api/stops?sub=mta&route_id=7', { status: 200, response: mockStops });
+
+      let expectedActions = [
+        { type: apiActions.GET_STOPS_START },
+        { type: apiActions.GET_STOPS_SUCCESS, stops: mockStops }
+      ];
+
+      return store.dispatch(apiActions.getStops('7')).then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    });
   });
 });

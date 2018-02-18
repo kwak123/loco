@@ -15,6 +15,12 @@ export default {
     routes: [],
 
     // Scraped service data from MTA
-    service: []
+    service: [],
+
+    // Used after routes and service, check organized-routes.json in test folder for example
+    organized: {},
+
+    // Save the current stops for the selected route
+    stops: [],
   }
 };

@@ -8,8 +8,11 @@ import {
   LOG_ERROR
 } from '../actions/user';
 
+import initialState from '../store/initial-state';
+const userState = initialState.user;
+
 // This is awful, this can be rewritten and made DRY somehow
-export default function(state = { loggedIn: false, favorites: [] }, action) {
+export default function(state = userState, action) {
   switch (action.type) {
     case LOG_IN_SUCCESS:
       return Object.assign({}, state, { loggedIn: action.loggedIn });

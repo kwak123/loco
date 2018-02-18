@@ -45,7 +45,7 @@ const getRoutesAndServiceFail = () => ({ type: GET_ROUTES_AND_SERVICE_FAIL });
 
 const getStopsStart = () => ({ type: GET_STOPS_START });
 const getStopsSuccess = (stops) => ({ type: GET_STOPS_SUCCESS, stops });
-const getStopsFail = (stops) => ({ type: GET_STOPS_FAIL });
+const getStopsFail = () => ({ type: GET_STOPS_FAIL });
 
 /**
  * Fetch all available routes from API

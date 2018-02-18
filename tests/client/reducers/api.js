@@ -12,33 +12,43 @@ import {
 
 import mockService from '../shared/mock-service.json';
 import mockRoutes from '../shared/mock-routes.json';
+import mockStops from '../shared/mock-stops.json';
 import organizedRoutes from '../shared/organized-routes.json';
 
+const initialState = { routes: [], service: [], organized: {}, stops: [] };
+
 describe('apiReducers', () => {
-  it('should have default state { routes: [], service: [], organized: {} }', () => {
+  it("should have default state { routes: [], service: [], organized: {}, stops: [] }", () => {
     let reduced = apiReducer(undefined, 'invalid action');
-    let expected = { routes: [], service: [], organized: {} };
+    let expected = initialState;
     expect(reduced).toEqual(expected);
   });
 
   it('should accept GET_ROUTES_SUCCESS with expected payload', () => {
     let action = { type: GET_ROUTES_SUCCESS, routes: mockRoutes };
     let reduced = apiReducer(undefined, action);
-    let expected = { routes: mockRoutes, service: [], organized: {} };
+    let expected = Object.assign({}, initialState, { routes: mockRoutes });
     expect(reduced).toEqual(expected);
   });
 
   it('should accept GET_SERVICE_SUCCESS with expected payload', () => {
-    let action = { type: GET_SERVICE_SUCCESS, service: mockService };
+    let action = { type: GET_SERVICE_SUCCESS, service: mockService.lines };
     let reduced = apiReducer(undefined, action);
-    let expected = { routes: [], service: mockService, organized: {} };
+    let expected = Object.assign({}, initialState, { service: mockService.lines });
     expect(reduced).toEqual(expected);
   });
 
   it('should accept ORGANIZE_ROUTES_SUCCESS', () => {
     let action = { type: ORGANIZE_ROUTES_SUCCESS, organized: { test: true } };
     let reduced = apiReducer(undefined, action);
-    let expected = { routes: [], service: [], organized: { test: true } };
+    let expected = Object.assign({}, initialState, { organized: { test: true } });
     expect(reduced).toEqual(expected);
   });
+
+  it('should accept GET_STOPS_SUCCESS with expected payload', () => {
+    let action = { type: GET_STOPS_SUCCESS, stops: mockStops };
+    let reduced = apiReducer(undefined, action);
+    let expected = Object.assign({}, initialState, { stops: mockStops });
+    expect(reduced).toEqual(expected);
+  })
 });
