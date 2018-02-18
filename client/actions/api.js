@@ -81,8 +81,8 @@ export const getService = () => (dispatch) => {
 export const organizeRoutes = () => (dispatch, getState) => {
   dispatch(organizeRoutesStart())
   try {
-    let service = getState().service;
-    let routes = getState().routes;
+    let service = getState().api.service;
+    let routes = getState().api.routes;
     let organized = util.routeOrganizer(service, routes);
     return dispatch(organizeRoutesSuccess(organized));
   } catch (exception) {

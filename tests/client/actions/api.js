@@ -12,6 +12,7 @@ import mockStops from '../shared/mock-stops.json';
 import organizedRoutes from '../shared/organized-routes.json';
 
 import * as util from '../../../client/lib/util';
+import initialState from '../../../client/store/initial-state';
 
 // Nature of MTA data means the actually used data is in the lines property
 const mockService = mockServiceObj.lines;
@@ -19,7 +20,7 @@ const mockService = mockServiceObj.lines;
 describe('api actions', () => {
   let store;
   beforeEach(() => {
-    store = mockStore({ routes: [], service: [], organized: {}, stops: [], error: '' });
+    store = mockStore(initialState);
     moxios.install()
   });
   afterEach(() => moxios.uninstall());
@@ -94,7 +95,7 @@ describe('api actions', () => {
     });
 
     it('should handle fetching service and routes from state for creating organized', () => {
-      let orgStore = mockStore({ routes: mockRoutes, service: mockService, organized: {} });
+      let orgStore = mockStore({ api: { routes: mockRoutes, service: mockService, organized: {} } });
       let expectedActions = [
         { type: apiActions.ORGANIZE_ROUTES_START },
         { type: apiActions.ORGANIZE_ROUTES_SUCCESS, organized: organizedRoutes }
@@ -105,7 +106,8 @@ describe('api actions', () => {
     });
 
     it('should dispatch ORGANIZE_ROUTES_START then ORGANIZE_ROUTES_FAIL if unsuccessful', () => {
-      let orgStore = mockStore({ service: mockService, organized: {} }); // missing routes
+      let tempState = Object.assign({}, initialState, { api: { service: 'not a valid service' } });
+      let orgStore = mockStore(tempState);
       let expectedActions = [
         { type: apiActions.ORGANIZE_ROUTES_START },
         { type: apiActions.ORGANIZE_ROUTES_FAIL, error: 'Failed to organize routes' }
