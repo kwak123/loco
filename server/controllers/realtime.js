@@ -27,7 +27,7 @@ const getServiceRouteData = (req, res) => {
       route_id : routeId
     }
   })
-  .then(( {data }) => res.send(data))
+  .then(({ data }) => res.send(data))
   .catch((error) => {
     console.log('error', error.data);
     res.sendStatus(404);

@@ -5,8 +5,7 @@ import Routes from '../components/routes/Routes.jsx';
 
 const mapStateToProps = (state) => {
   return {
-    routes: state.api.routes,
-    organized: state.api.organized
+    service: state.api.service
   };
 };
 

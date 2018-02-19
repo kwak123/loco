@@ -9,11 +9,10 @@ export default class Routes extends React.Component {
   }
 
   render() {
-    console.log(this.props.organized);
     return (
       <div className="trainline_container">
-        {this.props.routes.map((route, idx) => 
-          <RouteGroup key={idx} name={'test'} status={'GOOD_SERVICE'} />)}
+        {this.props.service.map(({ name, status }, idx) => 
+          <RouteGroup key={idx} name={name} status={status} />)}
       </div>
     );
   }

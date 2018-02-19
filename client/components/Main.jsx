@@ -14,7 +14,7 @@ export default class Main extends React.Component {
         <div className="outer">
           <NavBarContainer />
           <Switch>
-            <Route path="/" component={RoutesContainer} />
+            <Route exact path="/" component={RoutesContainer} />
             <Route path="/login" component={LogInContainer} />
           </Switch>
         </div>

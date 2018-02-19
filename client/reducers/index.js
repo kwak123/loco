@@ -1,10 +1,5 @@
 import user from './user';
-import fetching from './fetching';
 import api from './api';
-import { combineReducers } from 'redux';
+import fetching from './fetching';
 
-export default combineReducers({
-  user,
-  fetching,
-  api
-});
+export default { user, api, fetching };
