@@ -5,7 +5,8 @@ import Routes from '../components/routes/Routes.jsx';
 
 const mapStateToProps = (state) => {
   return {
-    service: state.api.service
+    service: state.api.service,
+    organized: state.api.organized
   };
 };
 
@@ -14,7 +15,7 @@ const mapDispatchToProps = (dispatch) => {
     getRoutesAndService() {
       dispatch(getRoutesAndService());
     }
-  }
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Routes);

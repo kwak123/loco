@@ -9,7 +9,11 @@ db.on('error', (error) => console.log(error));
 db.once('open', () => console.log('mongo loaded'));
 
 mongoose.Promise = global.Promise;
-mongoose.connect(DB_CREDENTIALS);
+if (process.env.NODE_ENV === 'prod') {
+  mongoose.connect(DB_CREDENTIALS);
+} else {
+  mongoose.connect('mongodb://localhost/loco');
+}
 
 module.exports = {
   mongoose,

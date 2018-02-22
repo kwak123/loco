@@ -1,3 +1,4 @@
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
 const SRC = path.join(__dirname, '/client');
 const DIST = path.join(__dirname, '/server/dist');
@@ -14,9 +15,19 @@ module.exports = {
         test: /\.(js|jsx)$/,
         include: SRC,
         use: ['babel-loader']
+      },
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: 'css-loader'
+        })
       }
     ]
   },
+  plugins: [
+    new ExtractTextPlugin('main.css')
+  ],
   devServer: {
     historyApiFallback: true
   }

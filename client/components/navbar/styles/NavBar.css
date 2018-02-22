@@ -50,46 +50,4 @@
 
 .navbar__logo--text > a:active {
   filter: brightness(0.6);
-}.routes__container {
-  display: flex;
-  flex-flow: column;
-}
-
-.routegroup__container {
-  margin: 16px;
-}
-
-.routegroup__row {
-  display: grid;
-  align-items: center;
-  justify-items: center;
-  grid-template-columns: 1fr 2fr 1fr 1fr;
-}
-
-.routegroup__name {
-  font-size: 20px;
-}
-
-.routegroup__status--text {
-
-}
-
-.routegroup__status--icon {
-  border-radius: 32px;
-  height: 32px;
-  width: 32px;
-  justify-self: center;
-  background: #0dc000;
-}
-
-.routegroup__divider {
-  margin-top: 16px;
-  height: 1px;
-  background-color: grey;
-}#app {
-  padding-top: 70px;
-}
-
-.app__container {
-  
 }

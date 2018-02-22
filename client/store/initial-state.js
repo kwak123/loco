@@ -23,6 +23,7 @@ export default {
     // Save the current stops for the selected route
     stops: [],
 
+    // Error message
     error: ''
   }
 };

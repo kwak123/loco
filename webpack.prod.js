@@ -7,7 +7,7 @@ module.exports = merge(config, {
   plugins: [
     new UglifyJSPlugin(),
     new CleanWebpackPlugin([DIST], {
-      exclude: ['index.html', 'main.css']
+      exclude: ['index.html']
     })
   ]
 });
