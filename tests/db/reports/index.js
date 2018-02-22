@@ -22,13 +22,17 @@ describe('reportDb', () => {
     });
   });
 
-  afterEach((done) => client.flushdb(done));
+  afterEach(async (done) => client.flushdb(done));
 
-  it('should handle adding a new report to the db', () => {
+  it('should handle adding a new report to the db', (done) => {
     let testParams = ['test', 'delayed', '123', 'a'];
     return addReport(...testParams)
     .then((count) => {
       expect(count).toBe(1); // Should return the new count
+      client.scan('0', (error, keys) => {
+        expect(keys[1]).toContain(testParams.join('-'));
+        done();
+      });
     });
   });
 
@@ -82,7 +86,7 @@ describe('reportDb', () => {
     .then(() => getReportsByStopAndRoute(...searchParams))
     .then((result) => {
       // While we may not care about order in use, it's important for testing
-      result.sort((a, b) => a.name > b.name);
+      result.sort((a, b) => a.type > b.type);
       expect(result).toEqual(expected);
     });
   });
@@ -101,7 +105,7 @@ describe('reportDb', () => {
     .then(() => getReportsByRoute(...searchParams))
     .then((result) => {
       // While we may not care about order in use, it's important for testing
-      result.sort((a, b) => a.name > b.name);
+      result.sort((a, b) => a.type > b.type);
       expect(result).toEqual(expected);
     });
   });
