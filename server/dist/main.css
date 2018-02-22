@@ -237,3 +237,9 @@ body {
   box-shadow: 0 0 3px 0px black;
   margin: 12px;
 }
+
+.divider {
+  height: 1px;
+  width: 100vw;
+  background-color: #000000;
+}

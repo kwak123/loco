@@ -26,7 +26,10 @@ client.on('error', (error) => console.log('redis error:', error));
       * 1234590: 1234590
   
   The second table (the one with time stamps) uses the time as score and value.
-  When cleaning, we use the ZREMRANGEBYSCORE to simply remove all the reports older than 30 minutes
+  When cleaning, we use the ZREMRANGEBYSCORE to simply remove all the reports older than 30 
+  
+  Things to consider:
+  Abstract some service for getting the time -> testing
 */
 
 
@@ -60,7 +63,7 @@ const _checkMems = (memStr, params = []) => params.reduce((acc, b) => {
  */
 const _mapPromise = (tasks) => Promise.all(tasks.map((task) => new Promise(task))).catch((error) => console.log(error));
 
-/**
+/**t
  * Cleaner helper method, runs after the current members are gathered.
  * Will clean up old reports, as well as empty members in reports
  */
@@ -113,7 +116,7 @@ _cleaner();
  * @param {string} routeId id of route e.g. '7';
  */
 const addReport = (sub, type, stopId, routeId) => new Promise((resolve, reject) => {
-  let name = `${sub}-${type}-${stopId}-${routeId}`;
+  let name = [sub, type, stopId, routeId].join('-');
   let time = Date.now();
   client.sadd(REPORTS, name, (error, result) => {
     if (error) { return reject(error); }
@@ -129,7 +132,7 @@ const addReport = (sub, type, stopId, routeId) => new Promise((resolve, reject) 
 
 /**
  * See report counts for a certain sub, type, stopId, and routeId
- * Returns a promise that resolves with the complain count
+ * Returns a Promise that resolves with the complain count
  * 
  * @param {string} sub transit authority e.g. 'mta'
  * @param {string} type type of report e.g. 'delay'
@@ -137,7 +140,7 @@ const addReport = (sub, type, stopId, routeId) => new Promise((resolve, reject) 
  * @param {string} routeId id of route e.g. '7';
  */
 const getReport = (sub, type, stopId, routeId) => new Promise((resolve, reject) => {
-  let name = `${sub}-${type}-${stopId}-${routeId}`;
+  let name = [sub, type, stopId, routeId].join('-');
   client.sismember(REPORTS, name, (error, result) => {
     if (error) { return reject(0); }
     if (result === 0) { return resolve(result); }
@@ -150,7 +153,7 @@ const getReport = (sub, type, stopId, routeId) => new Promise((resolve, reject) 
 
 /**
  * Fetch all reports at a specific sub, stop, and route
- * Returns a promise that resolves with an array showing all reports
+ * Returns a Promise that resolves with an array showing all reports
  * 
  * To clarify the map section...
  *   1. Members array is mapped into callbacks holding name as closure variable
@@ -175,7 +178,7 @@ const getReportsByStopAndRoute = (sub, stopId, routeId) => new Promise((resolve,
 
 /**
  * Gets the grand total number of reports for any given route
- * Returns a promise that resolves with an array of all reports
+ * Returns a Promise that resolves with an array of all reports
  * 
  * To clarify the map section...
  *   1. Members array is first filtered for the correct route ids
@@ -200,45 +203,11 @@ const getReportsByRoute = (sub, routeId) => new Promise((resolve, reject) => {
 
 
 
-/**
- * Fetches every available report from the db at the time of invocation.
- * Returns a promise that resolves with an object with all the available reports
- * 
- */
-
-/*
-const getAllComplaintCounts = () => new Promise((resolve, reject) => {
-  let complaintCounts = {};
-  client.smembers(REPORTS, (error, members) => {
-    if (error) { reject(error) }
-      members = members.map((name) => (cb) => client.zcount(name, 0, 'inf', (error, count) => cb(complaintCounts[name.slice(-1)] ? complaintCounts[name.slice(-1)]+=count : complaintCounts[name.slice(-1)] = count)));
-    _mapPromise(members).then((result) => resolve(complaintCounts))
-  });
-});
-*/
-
-
-/**
- * Intended to fetch all the reports a given user has made.
- * Not yet implemented, still deciding how to best track user ids
- */
-
-/*
-const checkComplaints = (sub, stopId, routeId, userId) => new Promise((resolve, reject) => {
-  client.smembers(REPORTS, (error, members) => {
-    members = members.filter((member) => _checkMems(member, [sub, stopId, routeId]))
-      .map((name) => (cb) => client.zscore(name, userId, (error, result) => cb({ name: name, exists: result})));
-    _mapPromise(members).then((result) => resolve(result));
-  });
-});
-*/
-
 module.exports = {
-  REPORTS,
   addReport,
   getReport,
   getReportsByStopAndRoute,
-  // getAllComplaintCounts,
   getReportsByRoute,
-  client
+  client,
+  REPORTS,
 };
