@@ -124,11 +124,6 @@
   ],
   "SIR":[
      {
-        "id":25,
-        "route_id":"R",
-        "route_desc":"Trains operate local between Forest Hills-71 Av, Queens, and 95 St/4 Av, Brooklyn, at all times except late nights. During late nights, trains operate only in Brooklyn between 36 St and 95 St/4 Av."
-     },
-     {
         "id":29,
         "route_id":"SI",
         "route_desc":"Service runs 24 hours a day between the St George and Tottenville terminals. At the St George terminal, customers can make connections with Staten Island Ferry service to Manhattan."
